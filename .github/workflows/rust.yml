@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: setup opencv
-      run: apt install libopencv-dev clang libclang-dev -y
+      run: sudo apt install libopencv-dev clang libclang-dev -y
     - name: Build
       run: cargo build --verbose
     - name: Run tests
