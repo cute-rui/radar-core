@@ -3,7 +3,7 @@ use anyhow::Result;
 use ndarray::Array2;
 use opencv::calib3d::{rodrigues, solve_pnp, SOLVEPNP_ITERATIVE};
 use opencv::imgproc::point_polygon_test;
-use crate::cal::pnp::Args;
+use crate::calculate::pnp::Args;
 
 #[derive(PartialEq, Eq, Hash, Copy, Clone)]
 pub enum ObjectType {
@@ -54,29 +54,72 @@ pub struct Config {
     pub debug: DebugConfig,*/
 }
 
+pub fn get_point_3d_in_json_string(color: Color) -> Result<String> {
+    if color == Color::Red {
+        Ok(serde_json::to_string(&[[
+                9.47097 - 0.649, 9.06324 - 0.433, 0.615
+            ],
+            [
+                9.47098 - 0.649, 9.72324 - 0.433, 0.615
+            ],
+            [
+                22.13425 - 0.649, 15.48899 - 0.433, 0.2
+            ],
+            [
+                25.87255 - 0.649, 15.48858 - 0.433, 0.4
+            ],
+            [
+                24.17254 - 0.649, 2.10967 - 0.433, 0.4
+            ],
+            [
+                10.90243 - 0.649, 7.60410 - 0.433, 0.6
+            ]])?)
+    } else {
+        Ok(
+            serde_json::to_string(&[[
+                19.86332 - 0.649, 6.83851 - 0.433, 0.615
+            ],
+            [
+                19.86332 - 0.649, 6.17851 - 0.433, 0.615
+            ],
+            [
+                7.16102 - 0.649, 0.48926 - 0.433, 0.2
+            ],
+            [
+                3.42256 - 0.649, 0.58967 - 0.433, 0.4
+            ],
+            [
+                5.12274 - 0.649, 13.86857 - 0.433, 0.4
+            ],
+            [
+                18.39284 - 0.649, 8.37415 - 0.433, 0.6
+            ]])?
+        )
+    }
 
+}
 
 //todo: fetch 3d map args,
 pub fn get_point_3d(from_config: bool, color: Color/*, config: Config*/) -> Result<Vector<Point3d>> {
     if !from_config {
-        if color == Color::Red {
-            return Ok(Vector::from_slice(&[
-                Point3d::new(9.47097-0.649, 9.06324-0.433, 0.615),
-                Point3d::new(9.47098-0.649, 9.72324-0.433, 0.615),
-                Point3d::new(22.13425-0.649,15.48899-0.433, 0.2),
-                Point3d::new(25.87255-0.649, 15.48858-0.433, 0.4),
-                Point3d::new(24.17254-0.649, 2.10967-0.433, 0.4),
-                Point3d::new(10.90243-0.649, 7.60410-0.433, 0.6),
-            ]));
+        return if color == Color::Red {
+            Ok(Vector::from_slice(&[
+                Point3d::new(9.47097 - 0.649, 9.06324 - 0.433, 0.615),
+                Point3d::new(9.47098 - 0.649, 9.72324 - 0.433, 0.615),
+                Point3d::new(22.13425 - 0.649, 15.48899 - 0.433, 0.2),
+                Point3d::new(25.87255 - 0.649, 15.48858 - 0.433, 0.4),
+                Point3d::new(24.17254 - 0.649, 2.10967 - 0.433, 0.4),
+                Point3d::new(10.90243 - 0.649, 7.60410 - 0.433, 0.6),
+            ]))
         } else {
-           return Ok(Vector::from_slice(&[
-               Point3d::new(19.86332 - 0.649, 6.83851 - 0.433, 0.615),
-               Point3d::new(19.86332 - 0.649, 6.17851 - 0.433, 0.615),
-               Point3d::new(7.16102 - 0.649, 0.48926 - 0.433, 0.2),
-               Point3d::new(3.42256 - 0.649, 0.58967 - 0.433, 0.4),
-               Point3d::new(5.12274 - 0.649, 13.86857 - 0.433, 0.4),
-               Point3d::new(18.39284 - 0.649, 8.37415 - 0.433, 0.6),
-           ]));
+            Ok(Vector::from_slice(&[
+                Point3d::new(19.86332 - 0.649, 6.83851 - 0.433, 0.615),
+                Point3d::new(19.86332 - 0.649, 6.17851 - 0.433, 0.615),
+                Point3d::new(7.16102 - 0.649, 0.48926 - 0.433, 0.2),
+                Point3d::new(3.42256 - 0.649, 0.58967 - 0.433, 0.4),
+                Point3d::new(5.12274 - 0.649, 13.86857 - 0.433, 0.4),
+                Point3d::new(18.39284 - 0.649, 8.37415 - 0.433, 0.6),
+            ]))
         }
     }
 
@@ -101,9 +144,9 @@ pub fn get_point_2d(threed: Vector<Point3d>, twod_from_input: Vector<Point2d>) -
 
 
 //todo: no height detection
-pub fn set_predict_point(mut args: &mut Args) -> Result<()> {
+pub fn set_predict_point(mut args: &mut Args, twod: Vector<Point2d>) -> Result<()> {
     let threed_point = get_point_3d(false, Color::Red)?;
-    let twod_point = get_point_2d(threed_point.clone(), Vector::new())?;
+    let twod_point = get_point_2d(threed_point.clone(), twod)?;
 
     solve_pnp(&threed_point, &twod_point, &args.intrinsics.K, &args.dist, &mut args.rvec, &mut args.tvec, false, SOLVEPNP_ITERATIVE)?;
 

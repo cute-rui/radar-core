@@ -1,6 +1,6 @@
 use opencv::core::{Mat, MatTraitConst};
 use anyhow::{anyhow, Result};
-use crate::cal::detect::DetectTarget;
+use crate::calculate::detect::DetectTarget;
 
 //todo: init once
 pub struct Args {
