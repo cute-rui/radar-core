@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
-use anyhow::{Error, Result};
-use config::{Config, ConfigError, File};
+use anyhow::{Result};
+use config::{Config, File};
 use std::fs;
 use std::io::Write;
 use toml;
@@ -154,7 +154,7 @@ impl AppConfig {
 pub fn read_or_create_config(path: &str) -> Result<AppConfig> {
     let config = match AppConfig::load_from_file(path) {
         Ok(c) => c,
-        Err(e) => {
+        Err(_e) => {
             let config = AppConfig::new()?;
             let context = toml::to_string(&config)?;
             create_config(context, path)?;

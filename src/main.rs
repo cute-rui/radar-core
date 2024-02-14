@@ -1,26 +1,26 @@
-use std::cell::Cell;
-use std::ops::Deref;
-use std::rc::Rc;
-use std::sync::{Arc, Mutex};
-use std::sync::atomic::AtomicBool;
-use std::thread::sleep;
-use std::time::Duration;
-use anyhow::{Error, Result};
-use axum::Router;
-use axum::routing::{get, post};
+
+
+
+
+
+
+
+use anyhow::{Result};
+
+
 use env_logger::Env;
-use log::{debug, error, log_enabled, info, Level};
-use opencv::core::Mat;
-use opencv::core;
-use opencv::photo::texture_flattening;
-use opencv::videoio::{VideoCapture, VideoCaptureTrait, VideoCaptureTraitConst};
+use log::{info};
+
+
+
+
 use tokio::join;
 use crate::calculate::daemon::calculate_daemon;
 use crate::common::config::read_or_create_config;
-use crate::common::image::test;
+
 use crate::calculate::calib::{start_calib};
-use crate::share::event::{EventBus, EventObject, new_test_event};
-use crate::srv::ws::init_router;
+use crate::share::event::{EventBus};
+use crate::srv::http::init_router;
 
 mod calculate;
 mod device;

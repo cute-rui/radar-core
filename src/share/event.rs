@@ -16,7 +16,7 @@ pub struct EventBus {
 
 impl EventBus {
     pub fn new() -> Self {
-        let (tx, rx) = tokio::sync::broadcast::channel::<Event>(16);
+        let (tx, _rx) = tokio::sync::broadcast::channel::<Event>(16);
 
         Self {
             tx,

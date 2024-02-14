@@ -144,7 +144,7 @@ pub fn get_point_2d(threed: Vector<Point3d>, twod_from_input: Vector<Point2d>) -
 
 
 //todo: no height detection
-pub fn set_predict_point(mut args: &mut Args, twod: Vector<Point2d>) -> Result<()> {
+pub fn set_predict_point(args: &mut Args, twod: Vector<Point2d>) -> Result<()> {
     let threed_point = get_point_3d(false, Color::Red)?;
     let twod_point = get_point_2d(threed_point.clone(), twod)?;
 

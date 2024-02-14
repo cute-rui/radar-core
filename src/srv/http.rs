@@ -1,21 +1,21 @@
 use std::convert::Infallible;
-use std::ptr::null;
-use std::thread::sleep;
-use std::time::Duration;
+
+
+
 use axum::Router;
 use anyhow::Result;
 use axum::body::Body;
-use axum::extract::{Request, State, WebSocketUpgrade};
+use axum::extract::{State, WebSocketUpgrade};
 use axum::extract::ws::{Message, WebSocket};
-use axum::http::{HeaderMap, Method, StatusCode};
-use axum::response::{IntoResponse, Response};
-use log::{debug, error};
-use crate::share::event::{Action, Event, EventBus, EventObject, EventObjectBuilder};
-use axum_macros::debug_handler;
-use tokio::io::join;
-use tokio::join;
+use axum::http::{Method, StatusCode};
+use axum::response::{Response};
+use log::{error};
+use crate::share::event::{Action, EventBus, EventObject, EventObjectBuilder};
+
+
+
 use tokio_stream::StreamExt;
-use tokio_stream::wrappers::errors::BroadcastStreamRecvError;
+
 use tower_http::cors::{Any, CorsLayer};
 use crate::calculate;
 use crate::common::config::AppConfig;
@@ -45,7 +45,7 @@ pub fn init_router(event_bus: EventBus, config: AppConfig) -> Router {
 
 async fn render_handler(State(app_state): State<AppState>) -> Response {
     let mut rx = app_state.event_bus.clone_rx();
-    let (datatx, mut datarx) = tokio::sync::mpsc::channel(8);
+    let (datatx, datarx) = tokio::sync::mpsc::channel(8);
 
     tokio::spawn(async move {
         while let Ok(event) = rx.recv().await {

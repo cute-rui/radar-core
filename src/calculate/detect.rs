@@ -1,7 +1,7 @@
 use std::collections::HashMap;
-use std::iter::Map;
-use std::ops::Deref;
-use ndarray::Array3;
+
+
+
 use opencv::core::Point2d;
 use anyhow::Result;
 use crate::calculate::tools::{ActionType, ObjectType, Container, is_container};
@@ -57,7 +57,7 @@ impl AnyHowDetectedResult {
 */
         
         
-        for mut car_box in self.car_boxes.iter() {
+        for car_box in self.car_boxes.iter() {
             let mut car = DetectTarget::new();
 
             car.location_point = get_map_location(parameter, car_box)?;

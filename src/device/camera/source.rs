@@ -17,7 +17,7 @@ pub struct VideoInfo {
 
 
 
-pub fn new_source_from_config(source: VideoSource, path: String, camera_config: CameraConfig) -> Box<dyn Source> {
+pub fn new_source_from_config(source: VideoSource, path: String, _camera_config: CameraConfig) -> Box<dyn Source> {
     match source {
        /* VideoSource::Video => {
             Box::new()

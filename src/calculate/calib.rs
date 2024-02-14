@@ -1,24 +1,24 @@
-use std::cell::Cell;
-use std::sync::{Arc, mpsc};
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::mpsc::{Receiver, Sender};
-use std::thread::sleep;
-use opencv::imgcodecs::{imencode, imread, ImwriteFlags};
+
+use std::sync::{Arc};
+
+use std::sync::mpsc::{Sender};
+
+use opencv::imgcodecs::{imencode};
 use anyhow::Result;
-use opencv::core::{Mat, MatTraitConstManual, Point, Scalar, Size, Vector};
-use opencv::imgproc;
+use opencv::core::{MatTraitConstManual, Point, Scalar, Vector};
+
 use std::sync::Mutex;
 use bytes::Bytes;
-use chrono::format;
-use log::{debug, info, warn};
+
+use log::{debug, info};
 use opencv::imgproc::HersheyFonts::FONT_HERSHEY_SIMPLEX;
 use opencv::imgproc::put_text;
-use tokio::join;
-use tokio::net::windows::named_pipe::PipeMode::Byte;
-use crate::common::config::{AppConfig, VideoSource};
-use crate::{device, srv};
+
+
+use crate::common::config::{AppConfig};
+use crate::{device};
 use crate::device::camera::source::{Source, VideoInfo};
-use crate::share::event::{Action, Event, EventBus, EventObject, EventReceiver, EventSender};
+use crate::share::event::{Action, EventBus, EventObject, EventSender};
 
 pub async fn calib_rtmp_push(opened: Arc<Mutex<bool>>, config: AppConfig, tx: Sender<Bytes>) -> Result<()> {
     while *(opened.lock().unwrap()) {
@@ -63,7 +63,7 @@ pub async fn calib_http_stream_push(opened: Arc<Mutex<bool>>, config: AppConfig,
     Ok(())
 }
 
-pub async fn start_calib(config: AppConfig, mut event_bus: EventBus) -> Result<()> {
+pub async fn start_calib(config: AppConfig, event_bus: EventBus) -> Result<()> {
     /*let (tx, rx) = mpsc::channel::<Bytes>();*/
 
     let conf = config.clone();

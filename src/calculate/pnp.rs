@@ -43,7 +43,7 @@ impl Intrinsics {
 }
 
 pub fn get_map_location(raw_arg: &Args, target: &DetectTarget) -> Result<[f64; 2]> {
-    let args = raw_arg.clone();
+    let args = raw_arg;
 
     let height = 0.0;
     let (fx, fy, cx, cy) = args.intrinsics.get_k_args()?;
